@@ -5,5 +5,18 @@
     </head>
     <body>
         <p>Welcome to Chat App</p>
+        <!-- script tag to open external file (socket io library) using source-->
+        <script src ="/socket.io/socket.io.js"></script>
+        <!-- script tag to add JavaScript code within, io() from src above -->
+        <script>
+            var socket = io()
+            socket.on('connect',()=>{
+                console.log('Connected to server')
+            })
+
+            socket.on('disconnect',()=>{
+                console.log('Disconnected from server')
+            })
+        </script>
     </body>
 </html>
