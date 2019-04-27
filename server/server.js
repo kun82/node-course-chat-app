@@ -21,16 +21,45 @@ var io = socketIO(server)  // configure the server to use socketIO
 //configure express.static middleware
 app.use(express.static(publicPath))
 
-//register an event listener
-io.on('connection',(socket)=>{ // listen to new 'connection'
-    console.log('New user connected') // message display evertime new user connected
+//register an event listener (listen event i.e. 'connection'/'disconnect')
+io.on('connection',(socket)=>{ // listen to new 'connection'(i.e. client browser on)
+    console.log('New user connected') // @terminal console
 
-    
-    socket.on('disconnect',()=>{
-        console.log('User was disconnected from server')
+    //EMIT(Server->Client)
+    // 1st arg- must be extact ('Name') specific in public/index.js socket.emit('Name')
+    // 2nd arg- desired input i.e. Object/boolean/string/Number. public/index.js need to be modified
+/* 
+    //EMIT - newEmail event  -from,text,createdAt -(Server->Client)
+    socket.emit('newEmail',{
+        from:'SERVER_EMIT@example.com',
+        text:"hey, this is newEmail from SERVER",
+        createAt:123
+    }) */
+
+    //EMIT - newMessage event  -from,text,createdAt -(Server->Client)
+    socket.emit('newMessage',{
+        from:'SERVER_EMIT@example.com',
+        text:"hey, this is newMessage from SERVER",
+        createAt:123
+    })
+
+/* 
+    //CreateEmail - Listen (Client->Server) to pass in create Event
+    socket.on('createEmail',(newEmail)=>{
+        console.log('createEmail: ', newEmail) // @terminal console
+    }) */
+
+    //CreateMessage - Listen (Client->Server) to pass in create Event
+      socket.on('createMessage',(message)=>{
+        console.log('createMessage: ', message) // @terminal console
+    })
+
+
+
+    socket.on('disconnect',()=>{ //listen to 'disconnect'(i.e. client browser close/exit)
+        console.log('User was disconnected from server') // @terminal console
     })
 })
-
 
 //PORT 
 server.listen(port,()=>{  //call back to print display
