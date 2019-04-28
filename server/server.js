@@ -26,27 +26,31 @@ io.on('connection',(socket)=>{ // listen to new 'connection'(i.e. client browser
     console.log('New user connected') // @terminal console
     // 1st arg- must be extact ('Name') specific in public/index.js socket.emit('Name')
     // 2nd arg- desired input i.e. Object/boolean/string/Number. public/index.js need to be modified
+        //CreateMessage event- Listen (Client->Server)
 
-    //CreateMessage event- Listen (Client->Server)
-      socket.on('createMessage',(message)=>{
-        console.log('createMessage: ', message) // @terminal console
-    // io.emit (multi connect) vs socket.emit (emit an event single connect)
-        io.emit('newMessage',{
-            from: message.from,
-            text: message.text,
-            createAt: new Date().getTime()
+//CHALLENGE -socket.emit from Admin, text welcome to chatapp
+        socket.emit ('newMessage',{ from:'Admin',text:"Welcome to Chat App,",createAt:new Date().getTime()})
+            
+ //CHALLENGE - socket.broadcast.emit from admin, text'new user joined
+        socket.broadcast.emit ('newMessage',{ from:'Admin',text:"new user joined", createAt:new Date().getTime() })
+
+
+        socket.on('createMessage',(message)=>{
+            console.log('createMessage: ', message) // @terminal console
+
+//BROADCASTING EVENTS 
+    //*socket.broadcast.emit send message to ALL except SELF
+        // ie: socket.broadcast.emit('newMessage',{from: message.from,text: message.text, createAt: new Date().getTime()})
+    // *io.emit (multi connect) vs socket.emit (emit an event single connect)
+        // ie: io.emit('newMessage',{from: message.from,text: message.text, createAt: new Date().getTime()})
+
         })
-        
-
-    
-    })
-
-
 
     socket.on('disconnect',()=>{ //listen to 'disconnect'(i.e. client browser close/exit)
         console.log('User was disconnected from server') // @terminal console
     })
 })
+
 
 //PORT 
 server.listen(port,()=>{  //call back to print display

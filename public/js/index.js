@@ -14,7 +14,7 @@ socket.on('disconnect',function() {
     console.log('Disconnected from server')// @browser dev tool console
 })
 
-//NewMessage Event- Listen (Server-->Client)
+//NewMessage Event- Listen (from Server-->Client)
 socket.on('newMessage',function(message){
     console.log('NewMessage',message)// @browser dev tool console
 })
