@@ -24,34 +24,21 @@ app.use(express.static(publicPath))
 //register an event listener (listen event i.e. 'connection'/'disconnect')
 io.on('connection',(socket)=>{ // listen to new 'connection'(i.e. client browser on)
     console.log('New user connected') // @terminal console
-
-    //EMIT(Server->Client)
     // 1st arg- must be extact ('Name') specific in public/index.js socket.emit('Name')
     // 2nd arg- desired input i.e. Object/boolean/string/Number. public/index.js need to be modified
-/* 
-    //EMIT - newEmail event  -from,text,createdAt -(Server->Client)
-    socket.emit('newEmail',{
-        from:'SERVER_EMIT@example.com',
-        text:"hey, this is newEmail from SERVER",
-        createAt:123
-    }) */
 
-    //EMIT - newMessage event  -from,text,createdAt -(Server->Client)
-    socket.emit('newMessage',{
-        from:'SERVER_EMIT@example.com',
-        text:"hey, this is newMessage from SERVER",
-        createAt:123
-    })
-
-/* 
-    //CreateEmail - Listen (Client->Server) to pass in create Event
-    socket.on('createEmail',(newEmail)=>{
-        console.log('createEmail: ', newEmail) // @terminal console
-    }) */
-
-    //CreateMessage - Listen (Client->Server) to pass in create Event
+    //CreateMessage event- Listen (Client->Server)
       socket.on('createMessage',(message)=>{
         console.log('createMessage: ', message) // @terminal console
+    // io.emit (multi connect) vs socket.emit (emit an event single connect)
+        io.emit('newMessage',{
+            from: message.from,
+            text: message.text,
+            createAt: new Date().getTime()
+        })
+        
+
+    
     })
 
 
