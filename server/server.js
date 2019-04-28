@@ -12,6 +12,7 @@ const http = require ('http') //bulit in module
 const express = require('express')
 const socketIO = require('socket.io')
 
+const{generateMessage}= require('./utils/message')//import this function
 const publicPath = path.join(__dirname,'../public') // go straight into the directory
 const port = process.env.PORT || 3000
 const app = express() // create Express application, express() is a top level function exported by express module
@@ -28,16 +29,17 @@ io.on('connection',(socket)=>{ // listen to new 'connection'(i.e. client browser
     // 2nd arg- desired input i.e. Object/boolean/string/Number. public/index.js need to be modified
         //CreateMessage event- Listen (Client->Server)
 
-//CHALLENGE -socket.emit from Admin, text welcome to chatapp
-        socket.emit ('newMessage',{ from:'Admin',text:"Welcome to Chat App,",createAt:new Date().getTime()})
-            
- //CHALLENGE - socket.broadcast.emit from admin, text'new user joined
-        socket.broadcast.emit ('newMessage',{ from:'Admin',text:"new user joined", createAt:new Date().getTime() })
-
-
-        socket.on('createMessage',(message)=>{
+//CHALLENGE -socket.emit from Admin with text welcome to chatapp USING generateMessage()
+        socket.emit ('newMessage',generateMessage('Admin','Welcome to chat app'))          
+//CHALLENGE -socket.broadcast.emit from admin, text'new user joined USING generateMessage()
+        socket.broadcast.emit ('newMessage',generateMessage('Admin','New user joined!'))
+    
+    //CreateMessage custom Event- Listen (From Client-->Server)
+        socket.on('createMessage',(message)=>{  //CreateMessage event- Listen (from Client->Server)
             console.log('createMessage: ', message) // @terminal console
-
+            
+            //(fromServer-->Client)
+            io.emit('newMessage',generateMessage(message.from,message.text)) //pass in 2 agrs & get 3 argsreturn
 //BROADCASTING EVENTS 
     //*socket.broadcast.emit send message to ALL except SELF
         // ie: socket.broadcast.emit('newMessage',{from: message.from,text: message.text, createAt: new Date().getTime()})
