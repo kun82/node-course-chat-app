@@ -6,9 +6,17 @@
     </head>
     <body>
         <p>Welcome to Chat App</p>
+        <!--"ol" = order list-->
+        <ol id="messages"></ol>  
+
+        <form id="message-form">
+            <input name="message" type="text" placeholder="type your message here"/>  <!--text field-->
+            <button>Send</button>  <!--send button-->
+        </form>
+
         <!-- script tag to open external file (allow access to socket.io library) using source-->
         <script src ="/socket.io/socket.io.js"></script>
-        <!-- script tag to add JavaScript code from /js/index.js -->
-        <script src="/js/index.js"></script>
+        <script src ="/js/libs/jquery-3.4.0.min.js"></script><!-- load Jquery file using source-->
+        <script src="/js/index.js"></script><!-- load JavaScript code from /js/index.js -->
     </body>
 </html>

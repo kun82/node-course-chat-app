@@ -27,25 +27,21 @@ io.on('connection',(socket)=>{ // listen to new 'connection'(i.e. client browser
     console.log('New user connected') // @terminal console
     // 1st arg- must be extact ('Name') specific in public/index.js socket.emit('Name')
     // 2nd arg- desired input i.e. Object/boolean/string/Number. public/index.js need to be modified
-        //CreateMessage event- Listen (Client->Server)
-
-//CHALLENGE -socket.emit from Admin with text welcome to chatapp USING generateMessage()
+//CHALLENGE -EMIT EVENT from Admin-->Client, text welcome to chatapp USING generateMessage()
         socket.emit ('newMessage',generateMessage('Admin','Welcome to chat app'))          
-//CHALLENGE -socket.broadcast.emit from admin, text'new user joined USING generateMessage()
-        socket.broadcast.emit ('newMessage',generateMessage('Admin','New user joined!'))
-    
-    //CreateMessage custom Event- Listen (From Client-->Server)
-        socket.on('createMessage',(message)=>{  //CreateMessage event- Listen (from Client->Server)
+//CHALLENGE -EMIT EVENT from Admin-->Client, text new user joined USING generateMessage()
+        socket.broadcast.emit ('newMessage',generateMessage('Admin','New user joined!'))    
+    //CreateMessage custom Event- Listen (From Client-->Server) and callback function for acknowledgement
+        socket.on('createMessage',(message,callback)=>{  
             console.log('createMessage: ', message) // @terminal console
-            
-            //(fromServer-->Client)
+            //(from Server-->Client)
             io.emit('newMessage',generateMessage(message.from,message.text)) //pass in 2 agrs & get 3 argsreturn
+            callback('Server Recieved')// call the function acknowledgement
 //BROADCASTING EVENTS 
-    //*socket.broadcast.emit send message to ALL except SELF
-        // ie: socket.broadcast.emit('newMessage',{from: message.from,text: message.text, createAt: new Date().getTime()})
-    // *io.emit (multi connect) vs socket.emit (emit an event single connect)
-        // ie: io.emit('newMessage',{from: message.from,text: message.text, createAt: new Date().getTime()})
-
+        //*socket.broadcast.emit send message to ALL except SELF
+            // ie: socket.broadcast.emit('newMessage',{from: message.from,text: message.text, createAt: new Date().getTime()})
+         // *io.emit (multi-connect) vs socket.emit (emit an event single connect)
+          // ie: io.emit('newMessage',{from: message.from,text: message.text, createAt: new Date().getTime()})
         })
 
     socket.on('disconnect',()=>{ //listen to 'disconnect'(i.e. client browser close/exit)

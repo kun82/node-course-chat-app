@@ -1,7 +1,7 @@
 
-// take in 2 agrs 'from' & 'text'
+// create function (take in 2 agrs 'from' & 'text')
 var generateMessage = (from,text)=>{
-    return { //return 3 agruments
+    return { //return an object with 3 properties
         from,
         text,
         createAt: new Date().getTime()
