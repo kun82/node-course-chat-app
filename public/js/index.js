@@ -1,5 +1,5 @@
 // MODULE NOT REQUIRE TO LOAD/IMPORT
-// This index.js is load into index.html which had imported socket.io lib via script tag
+// This index.js is load into index.html which had imported socket.io lib via script tag src=""
 
 // CLIENT
 var socket = io()  //io() method access from library
@@ -13,11 +13,13 @@ socket.on('disconnect',function() {
     console.log('Disconnected from server')// @browser dev tool console
 })
 
+//PRINTING MOMENT TIMESTAMPS
 //NewMessage Event- Listen (from Server-->Client)
 socket.on('newMessage',function(message){
-    console.log('NewMessage',message)// @browser dev tool console
+    var formattedTime = moment(message.createdAt).format('h:mm a')//using moment to format time
+ //   console.log('NewMessage',message)// @browser dev tool console
     var li = jQuery('<li></li>') //create a list item "li"
-    li.text(`${message.from}: ${message.text}`)
+    li.text(`${message.from} ${formattedTime}: ${message.text}`)
 
     jQuery("#messages").append(li) // append will add the messages display
 })
@@ -25,11 +27,12 @@ socket.on('newMessage',function(message){
 //GEOLOCATION 
 // listen Newlocation message(from Server-->Client)
 socket.on('newLocationMessage',function(message){ //pass in data from Server (declared message)
+    var formattedTime = moment(message.createdAt).format('h:mm a')//using moment to format time
     var li = jQuery('<li></li>') //create a LIST item "li"
     //create Anchor tag "a", target set to _blank open url in new browser tab
     var a = jQuery('<a target="_blank">My Current Location</a>')
     
-    li.text(`${message.from}: `)//set the personnal
+    li.text(`${message.from} ${formattedTime}: `)//set the personnal
     a.attr('href',message.url) //fetch Anchor tag Attribute message.url
     li.append(a) // append Anchor tag
     jQuery('#messages').append(li) // append will add the messages display
