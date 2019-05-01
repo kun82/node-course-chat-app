@@ -115,7 +115,6 @@ jQuery('#message-form').on('submit', function(e){
     var messageTextbox =jQuery('[name=message]')
     //CLIENT--> SERVER)
     socket.emit('createMessage',{
-        from:'User',
         text: messageTextbox.val()//select an element name = "message"
     },function(){
         messageTextbox.val('')//clear val using val('')

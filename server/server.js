@@ -56,18 +56,20 @@ io.on('connection',(socket)=>{ // listen to new 'connection'(i.e. client browser
     //CHALLENGE -EMIT EVENT from Admin-->Client  
     //Broadcast 'newMessage' to all user in the specific Chat Room when 'new user joined' USING generateMessage()
             socket.broadcast.to(params.room).emit('newMessage',generateMessage('Admin',`${params.name} has joined.`))
-
-                callback() // if valid just callback () -> 'join' at chat.js
+             callback() // if valid just callback () -> 'join' at chat.js
         })
 
 
-
- 
     //CreateMessage custom Event- Listen (From Client-->Server) and callback function for acknowledgement
-        socket.on('createMessage',(message,callback)=>{  
-            console.log('createMessage: ', message) // @terminal console
+        socket.on('createMessage',(message,callback)=>{
+            var user = users.getUser(socket.id)
+            if(user && isRealString(message.text)){//to check valid user && message is string & not empty
+                //emit to specific room only(from Server-->Client)
+                io.to(user.room).emit('newMessage',generateMessage(user.name,message.text)) //pass in 2 agrs & get 3 argsreturn
+            }
+
+            //console.log('createMessage: ', message) // @terminal console
             //(from Server-->Client)
-            io.emit('newMessage',generateMessage(message.from,message.text)) //pass in 2 agrs & get 3 argsreturn
             callback()// call the function acknowledgement
         })
 //BROADCASTING EVENTS 
@@ -79,8 +81,11 @@ io.on('connection',(socket)=>{ // listen to new 'connection'(i.e. client browser
 //GEOLCATION        
     //CreateLocationMessage custom Event- Listen (From Client-->Server) and callback function for acknowledgement
     socket.on('createLocationMessage',(coords)=>{ 
-        // Emit New location message (from Server-->Client)
-        io.emit('newLocationMessage',generateLocationMessage('Admin',coords.latitude, coords.longitude)) //pass in 3 agrs
+        var user = users.getUser(socket.id)
+        if(user){//to check valid user 
+            //emit location message to specific room only(from Server-->Client)
+            io.to(user.room).emit('newLocationMessage',generateLocationMessage(user.name,coords.latitude, coords.longitude)) //pass in 3 agrs
+        }
     })
 
 
