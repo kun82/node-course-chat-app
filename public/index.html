@@ -9,10 +9,12 @@
         <!--"ol" = order list-->
         <ol id="messages"></ol>  
 
-        <form id="message-form">
+        <form id="message-form">  <!--form tag for user-->
             <input name="message" type="text" placeholder="type your message here"/>  <!--text field-->
             <button>Send</button>  <!--send button-->
         </form>
+        <button id="send-location">Send Location</button>  <!--send location button with ID-->
+
 
         <!-- script tag to open external file (allow access to socket.io library) using source-->
         <script src ="/socket.io/socket.io.js"></script>

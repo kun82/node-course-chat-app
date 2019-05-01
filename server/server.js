@@ -12,7 +12,7 @@ const http = require ('http') //bulit in module
 const express = require('express')
 const socketIO = require('socket.io')
 
-const{generateMessage}= require('./utils/message')//import this function
+const{generateMessage,generateLocationMessage}= require('./utils/message')//import this function
 const publicPath = path.join(__dirname,'../public') // go straight into the directory
 const port = process.env.PORT || 3000
 const app = express() // create Express application, express() is a top level function exported by express module
@@ -37,12 +37,20 @@ io.on('connection',(socket)=>{ // listen to new 'connection'(i.e. client browser
             //(from Server-->Client)
             io.emit('newMessage',generateMessage(message.from,message.text)) //pass in 2 agrs & get 3 argsreturn
             callback('Server Recieved')// call the function acknowledgement
+        })
 //BROADCASTING EVENTS 
         //*socket.broadcast.emit send message to ALL except SELF
             // ie: socket.broadcast.emit('newMessage',{from: message.from,text: message.text, createAt: new Date().getTime()})
          // *io.emit (multi-connect) vs socket.emit (emit an event single connect)
           // ie: io.emit('newMessage',{from: message.from,text: message.text, createAt: new Date().getTime()})
-        })
+
+//GEOLCATION        
+    //CreateLocationMessage custom Event- Listen (From Client-->Server) and callback function for acknowledgement
+    socket.on('createLocationMessage',(coords)=>{ 
+        // Emit New location message (from Server-->Client)
+        io.emit('newLocationMessage',generateLocationMessage('Admin',coords.latitude, coords.longitude)) //pass in 3 agrs
+    })
+
 
     socket.on('disconnect',()=>{ //listen to 'disconnect'(i.e. client browser close/exit)
         console.log('User was disconnected from server') // @terminal console

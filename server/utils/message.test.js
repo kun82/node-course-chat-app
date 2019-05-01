@@ -1,7 +1,7 @@
 //MODULE
 
 var expect =require('expect')
-var {generateMessage} = require ('./message.js')
+var {generateMessage,generateLocationMessage} = require ('./message.js')
 
 describe('generateMessage',()=>{
     it('should generate correct message object',()=>{ //SYNCE test, (done) NOT REQUIRE
@@ -14,4 +14,17 @@ describe('generateMessage',()=>{
             text: test_text  //assert text match
         }) 
     })
+})
+
+describe('generateLocationMessage',()=>{ //SYNC test hence (done) not required
+    it('should generate correct location object',()=>{
+        var from = "Admin_Test" //store res in variable
+        var lat = 1111 //store res in variable
+        var long = 2222//store res in variable  
+        var url= 'https://www.google.com/maps?q=1111,2222'      
+        var message = generateLocationMessage (from,lat,long)
+        expect(typeof message.createAt).toBe('number') //assert createAt is number
+        expect(message).toMatchObject({from,url})  //
+    })
+
 })
