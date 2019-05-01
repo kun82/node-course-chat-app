@@ -36,7 +36,7 @@ io.on('connection',(socket)=>{ // listen to new 'connection'(i.e. client browser
             console.log('createMessage: ', message) // @terminal console
             //(from Server-->Client)
             io.emit('newMessage',generateMessage(message.from,message.text)) //pass in 2 agrs & get 3 argsreturn
-            callback('Server Recieved')// call the function acknowledgement
+            callback()// call the function acknowledgement
         })
 //BROADCASTING EVENTS 
         //*socket.broadcast.emit send message to ALL except SELF

@@ -22,17 +22,6 @@ socket.on('newMessage',function(message){
     jQuery("#messages").append(li) // append will add the messages display
 })
 
-//ACKNOWLEDGEMENTS EVENT - ie acknowledge  valid message/data received
-// Emit - CLIENT to SERVER and function ()
-/* 
-    socket.emit('createMessage', {
-    from: 'Client',
-    text: 'hi'
-},function(data){ //callback() from server.js
-    console.log('Message:',data)
-}) */ 
-
-
 //GEOLOCATION 
 // listen Newlocation message(from Server-->Client)
 socket.on('newLocationMessage',function(message){ //pass in data from Server (declared message)
@@ -46,15 +35,17 @@ socket.on('newLocationMessage',function(message){ //pass in data from Server (de
     jQuery('#messages').append(li) // append will add the messages display
 })
 
-
 //jQuery selector with Event Listen
 jQuery('#message-form').on('submit', function(e){
     e.preventDefault() // prevent/override default behaviour for the event
+    
+    var messageTextbox =jQuery('[name=message]')
     //CLIENT--> SERVER)
     socket.emit('createMessage',{
         from:'User',
-        text:jQuery('[name=message]').val()//select an element name = "message"
+        text: messageTextbox.val()//select an element name = "message"
     },function(){
+        messageTextbox.val('')//clear val using val('')
 
     })
 })
@@ -65,13 +56,33 @@ var locationButton = jQuery('#send-location')
 locationButton.on('click', function() { // must use 'click' inorder to work
     if(!navigator.geolocation){ //if NO Geolocation Object at navigator
         return alert('Geolocation not supported by your browser') //popup default alert box @browser
-    } //else access the navigator for current location
+    }
+
+    //disabled the button after click "send location" & display sending text
+    locationButton.attr('disabled','disabled').text('Sending Location....')
+    
+    //else access the navigator for current location
     navigator.geolocation.getCurrentPosition (function(position){
-        socket.emit('createLocationMessage',{ //CLIENT--> SERVER)
+         //removed "disabled button" attribute & display send text
+        locationButton.removeAttr('disabled').text('Send Location') 
+            socket.emit('createLocationMessage',{ //CLIENT--> SERVER)
             latitude:position.coords.latitude, //object x-refer to devtools console
             longitude:position.coords.longitude
         })
     },function(){ //error handler
+        //removed "disabled button" attribute & display send text
+        locationButton.removeAttr('disabled').text('Send Location')
         alert('Unable to fetch location') //popup default alert box @browser
     })
 })
+
+
+//ACKNOWLEDGEMENTS EVENT - ie acknowledge  valid message/data received
+// Emit - CLIENT to SERVER and function ()
+/* 
+    socket.emit('createMessage', {
+    from: 'Client',
+    text: 'hi'
+},function(data){ //callback() from server.js
+    console.log('Message:',data)
+}) */ 

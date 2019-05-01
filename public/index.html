@@ -3,18 +3,30 @@
 <html>
     <head>
         <meta charset="utf-8">
+        <link rel="stylesheet" href="/css/styles.css"> 
     </head>
-    <body>
-        <p>Welcome to Chat App</p>
-        <!--"ol" = order list-->
-        <ol id="messages"></ol>  
 
-        <form id="message-form">  <!--form tag for user-->
-            <input name="message" type="text" placeholder="type your message here"/>  <!--text field-->
-            <button>Send</button>  <!--send button-->
-        </form>
-        <button id="send-location">Send Location</button>  <!--send location button with ID-->
+    <body class="chat"> <!--class attribe to tell stylesheet to load sytle for this chat page-->
+        
+        <div class="chat__sidebar">
+            <h3>People</h3>
+            <div id="users"> </div>
+        </div>
 
+        <div class="chat__main">
+            <ol id="messages" class="chat__messages" ></ol>  <!--"ol" = order list-->
+            
+            <div class="chat__footer">
+                <form id="message-form">  <!--form tag for user-->
+                    <input name="message" type="text" placeholder="type your message here" autofocus autocomplete="off"/>  <!--text field-->
+                    <button>Send</button>  <!--send button-->
+                </form>
+                <button id="send-location">Send Location</button>  <!--send location button with ID-->
+            </div>
+            
+        </div>
+
+        
 
         <!-- script tag to open external file (allow access to socket.io library) using source-->
         <script src ="/socket.io/socket.io.js"></script>
