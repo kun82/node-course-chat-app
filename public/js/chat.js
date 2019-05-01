@@ -4,6 +4,27 @@
 // CLIENT
 var socket = io()  //io() method access from library
 
+//AUTOSCROLLING 
+//function allow user to read history text when new messages recieved within a threshold
+// and when its near bottom it will display new recieved message
+function scrollToBottom(){ 
+    //selectors
+    var messages = jQuery('#messages')
+    var newMessage = messages.children('li:last-child') //last-child (list item) modifier
+    //heights
+//.prop() method gets the property value for only the first element in the matched set.
+    var clientHeight = messages.prop ('clientHeight') 
+    var scrollTop = messages.prop ('scrollTop')
+    var scrollHeight = messages.prop ('scrollHeight')
+// .innerHeight() get the current computed height for the first element in the set of matched elements, including padding but not border.
+    var newMessageHeight = newMessage.innerHeight()
+    var lastMessageHeight = newMessage.prev().innerHeight()
+//Get the current computed height for the first element in the set of matched elements, including padding but not border.
+    if (clientHeight + scrollTop + newMessageHeight + lastMessageHeight >= scrollHeight){
+        messages.scrollTop(scrollHeight);
+    }
+}
+
 //listen to an event (connect/disconnect client)
 socket.on('connect', function(){
     console.log('Connected to server')// @browser dev tool console
@@ -25,6 +46,10 @@ socket.on('newMessage',function(message){
     })
 
     jQuery('#messages').append(html)
+    //function scrollToBottom
+    scrollToBottom()
+        
+
 /*
     var formattedTime = moment(message.createdAt).format('h:mm a')//using moment to format time
  //   console.log('NewMessage',message)// @browser dev tool console
@@ -45,8 +70,8 @@ socket.on('newLocationMessage',function(message){ //pass in data from Server (de
         createdAt: formattedTime
     })
     jQuery('#messages').append(html)
-
-
+    //function scrollToBottom
+    scrollToBottom()
 /*     
     var formattedTime = moment(message.createdAt).format('h:mm a')//using moment to format time
     var li = jQuery('<li></li>') //create a LIST item "li"

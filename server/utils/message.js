@@ -1,7 +1,6 @@
 var moment =require('moment')
 var someTimestamp = moment().valueOf()
 
-
 // create function (take in 2 agrs 'from' & 'text')
 var generateMessage = (from,text)=>{
     return { //return an object with 3 properties
@@ -10,7 +9,6 @@ var generateMessage = (from,text)=>{
         createAt: someTimestamp
     }
 }
-
 
 // create function (take in 3 agrs FROM, LAT & LONG)
 var generateLocationMessage = (from,latitude,longitude)=>{
