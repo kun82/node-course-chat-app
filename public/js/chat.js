@@ -27,12 +27,36 @@ function scrollToBottom(){
 
 //listen to an event (connect/disconnect client)
 socket.on('connect', function(){
-    console.log('Connected to server')// @browser dev tool console
+    //console.log('Connected to server')// @browser dev tool console
+    var params = jQuery.deparam(window.location.search)
+
+    socket.emit('join', params, function(err){
+        if(err){
+            alert(err) // popup alert box @browser
+            window.location.href = '/'
+        }else{
+            console.log('No error')
+        }
+    })
 })
 
 socket.on('disconnect',function() {
     console.log('Disconnected from server')// @browser dev tool console
 })
+
+//WIRING UP USER LIST
+//updateUser List - Listen (from Server-->Client)
+socket.on('updateUserList',function(users){
+    var ol = jQuery('<ol></ol>') // order list tag
+     users.forEach(function(user){ //iteration for adding users
+        ol.append(jQuery('<li></li>').text(user)) // create a new list item for each user
+    })
+    jQuery('#users').html(ol)
+
+    console.log('Users list ', users)
+})
+
+
 
 //PRINTING MOMENT TIMESTAMPS using moment module
 //NewMessage Event- Listen (from Server-->Client) - using mustache render more scalable
